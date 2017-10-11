@@ -58,6 +58,20 @@
 				opacity: 0;
 				filter: alpha(opacity=0);
 			}
+      img {
+        max-width: 450px;
+        box-shadow: 0px 0px 5px #888888;
+        width: 100%;
+        margin-top: 10px;
+      }
+      #colorBox {
+        max-width: 450px;
+        min-height: 20px;
+        border: 1px solid #bfbfbf;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
   </head>
   <body>
@@ -88,7 +102,8 @@
         <input id="imgInp" type="file" class="upload"/>
       </div><br>
       <span id="skinStatus" style="display: none;">somethings wrong...</span><br>
-      <img id="renderTarget" style="opacity: 0;">
+      <div id="colorBox" style="display: none"></div>
+      <img id="renderTarget" style="opacity: 1;">
     </div>
     <div style="position: fixed; bottom: 10px; width: 100%; padding: 5px 5px;">
       (c)2017 Prazma Startup
@@ -96,7 +111,7 @@
     <script>
       $("#imgInp").change(function(){
         const log = document.getElementById("skinStatus");
-				document.getElementById("updlabel").innerHTML = "change selfie";
+				document.getElementById("updlabel").innerHTML = "complete!";
         log.style.display = "block";
         log.innerHTML = "creating skin... "
 				readURL(this);
@@ -106,33 +121,44 @@
 					var reader = new FileReader();
 					reader.onload = function (e) {
 						$('#renderTarget').attr('src', e.target.result);
+            setTimeout( function () {
+              getColor();
+            }, 300)
 					}
 					reader.readAsDataURL(input.files[0]);
 				}
-				const del = document.getElementById("renderTarget");
+      }
+      function getColor() {
+        const box = document.getElementById("colorBox");
         const log = document.getElementById("skinStatus");
-				if(!del.canvas) {
-					del.canvas = $('<canvas />')[0];
-					del.canvas.width = del.width;
-					del.canvas.height = del.height;
-					del.canvas.getContext('2d').drawImage(del, 0, 0, del.width, del.height);
-				}
-				var pixelData = del.canvas.getContext('2d').getImageData(1, 1, 1, 1).data;
-				var rgbaCode = "rgba(" + pixelData[0] + "," + pixelData[1] + "," + pixelData[2] + "," + pixelData[3] + ")";
-				var hex = rgb2hex( rgbaCode );
+        const del = document.getElementById("renderTarget");
+        if(!del.canvas) {
+            del.canvas = $('<canvas />')[0];
+            del.canvas.width = del.width;
+            del.canvas.height = del.height;
+            del.canvas.getContext('2d').drawImage(del, 0, 0, del.width, del.height);
+        }
+        var pixelData = del.canvas.getContext('2d').getImageData(3, 3, 1, 1).data;
+        var Colorex = "rgba(" + pixelData[0] + "," + pixelData[1] + "," + pixelData[2] + "," + pixelData[3] + ")";
+        console.log(Colorex);
+        var hex = rgb2hex( Colorex );
+        log.innerHTML = "skin hex code " + hex;
+        box.style.display = "block";
+        box.style.background = hex;
         setTimeout( function () {
-          log.innerHTML = "skin hex code: " + hex;
-          console.log(rgbaCode);
-          console.log(hex);
-        }, 500)
-			}
+          document.getElementById("setport").style.opacity = "0";
+        }, 1000)
+        setTimeout( function () {
+          document.getElementById("setport").style.display = "none";
+        }, 1500)
+      }
       function rgb2hex(rgb){
-				rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-				return (rgb && rgb.length === 4) ? "0x" +
-					("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-					("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-					("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
-			}
+        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+        return (rgb && rgb.length === 4) ? "#" +
+          ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+          ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+          ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+      }
     </script>
   </body>
 </html>
