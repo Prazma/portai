@@ -6,6 +6,7 @@
     <script src="js/jquery.js"></script>
     <link href='css/productSans.css' rel='stylesheet' type='text/css'>
     <script src="js/skinFactor.js"></script>
+    <script src="js/trackEntity.js"></script>
     <style>
       body {
         margin: 0;
@@ -130,33 +131,29 @@
 				}
       }
       function getColor() {
-        $('#picture').faceDetection({
-          console.log("detecting faces with virtual walkaround...");
-          complete: function (faces) {
-            const box = document.getElementById("colorBox");
-            const log = document.getElementById("skinStatus");
-            const del = document.getElementById("renderTarget");
-            if(!del.canvas) {
-              del.canvas = $('<canvas />')[0];
-              del.canvas.width = del.width;
-              del.canvas.height = del.height;
-              del.canvas.getContext('2d').drawImage(del, 0, 0, del.width, del.height);
-            }
-            var pixelData = del.canvas.getContext('2d').getImageData(faces[i].x, faces[i].y, 1, 1).data;
-            var Colorex = "rgba(" + pixelData[0] + "," + pixelData[1] + "," + pixelData[2] + "," + pixelData[3] + ")";
-            console.log(Colorex);
-            var hex = rgb2hex( Colorex );
-            log.innerHTML = "skin hex code " + hex;
-            box.style.display = "block";
-            box.style.background = hex;
-            setTimeout( function () {
-              document.getElementById("setport").style.opacity = "0";
-            }, 1000)
-            setTimeout( function () {
-              document.getElementById("setport").style.display = "none";
-            }, 1500)
-          }
-        });
+        console.log("detecting faces with virtual walkaround...");
+        const box = document.getElementById("colorBox");
+        const log = document.getElementById("skinStatus");
+        const del = document.getElementById("renderTarget");
+        if(!del.canvas) {
+          del.canvas = $('<canvas />')[0];
+          del.canvas.width = del.width;
+          del.canvas.height = del.height;
+          del.canvas.getContext('2d').drawImage(del, 0, 0, del.width, del.height);
+        }
+        var pixelData = del.canvas.getContext('2d').getImageData(faces[i].x, faces[i].y, 1, 1).data;
+        var Colorex = "rgba(" + pixelData[0] + "," + pixelData[1] + "," + pixelData[2] + "," + pixelData[3] + ")";
+        console.log(Colorex);
+        var hex = rgb2hex( Colorex );
+        log.innerHTML = "skin hex code " + hex;
+        box.style.display = "block";
+        box.style.background = hex;
+        setTimeout( function () {
+          document.getElementById("setport").style.opacity = "0";
+        }, 1000)
+        setTimeout( function () {
+          document.getElementById("setport").style.display = "none";
+        }, 1500)
       }
       function rgb2hex(rgb){
         rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
