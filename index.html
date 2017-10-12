@@ -131,6 +131,7 @@
       }
       function getColor() {
         $('#picture').faceDetection({
+          console.log("detecting faces with virtual walkaround...");
           complete: function (faces) {
             const box = document.getElementById("colorBox");
             const log = document.getElementById("skinStatus");
@@ -154,10 +155,6 @@
             setTimeout( function () {
               document.getElementById("setport").style.display = "none";
             }, 1500)
-          }
-          error: function (code, message) {
-            alert(message);
-            console.log(code);
           }
         });
       }
