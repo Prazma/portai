@@ -141,7 +141,7 @@
               del.canvas.height = del.height;
               del.canvas.getContext('2d').drawImage(del, 0, 0, del.width, del.height);
             }
-            var pixelData = del.canvas.getContext('2d').getImageData(faces[i].x * faces[i].scaleX / 2, faces[i].y * faces[i].scaleX/ 2, 1, 1).data;
+            var pixelData = del.canvas.getContext('2d').getImageData(faces[i].x, faces[i].y, 1, 1).data;
             var Colorex = "rgba(" + pixelData[0] + "," + pixelData[1] + "," + pixelData[2] + "," + pixelData[3] + ")";
             console.log(Colorex);
             var hex = rgb2hex( Colorex );
@@ -154,6 +154,10 @@
             setTimeout( function () {
               document.getElementById("setport").style.display = "none";
             }, 1500)
+          }
+          error: function (code, message) {
+            alert(message);
+            console.log(code);
           }
         });
       }
