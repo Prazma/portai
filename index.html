@@ -47,6 +47,12 @@
         border-color: #bfbfbf;
         color: #AA6CD1;
       }
+      .rect {
+        border: 2px solid #a64ceb;
+        left: -1000px;
+        position: absolute;
+        top: -1000px;
+      }
 			.fileUpload {
 				position: relative;
 				overflow: hidden;
@@ -134,27 +140,25 @@
 				}
       }
       function getColor() {
-        var img = document.getElementById("renderTarget");
+        var img = document.getElementById('renderTarget');
         var tracker = new tracking.ObjectTracker(['face', 'eye', 'mouth']);
         tracker.setStepSize(1.7);
-        
-        tracker.track('#renderTarget', tracker);
-        
-        tracker.onTrack( function(event) {
+        tracking.track('#renderTarget', tracker);
+        tracker.on('track', function(event) {
           event.data.forEach(function(rect) {
             window.plot(rect.x, rect.y, rect.width, rect.height);
           });
         });
         window.plot = function(x, y, w, h) {
           var rect = document.createElement('div');
-          document.querySelector('.demo-container').appendChild(rect);
+          document.querySelector('#setport').appendChild(rect);
           rect.classList.add('rect');
           rect.style.width = w + 'px';
           rect.style.height = h + 'px';
           rect.style.left = (img.offsetLeft + x) + 'px';
           rect.style.top = (img.offsetTop + y) + 'px';
         };
-     }
+      }
     </script>
   </body>
 </html>
